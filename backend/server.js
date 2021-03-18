@@ -8,6 +8,8 @@ const adminRouter = require("./routes/adminRouter");
 const adsRouter = require("./routes/adsRouter");
 const categoryRouter = require("./routes/categoryRouter");
 const productRouter = require("./routes/productRouter");
+const superAdminRouter = require("./routes/superAdminRouter");
+const orderRouter = require("./routes/orderRouter");
 const cors = require("cors");
 app.use(express.json());
 
@@ -26,13 +28,16 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
+app.use("/superAdmin", superAdminRouter);
 app.use("/seller", sellerRouter);
 app.use("/buyer", buyerRouter);
 app.use("/admin", adminRouter);
 app.use("/ads", adsRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
+app.use("/order", orderRouter);
+
+
 app.listen(process.env.PORT, () => {
   console.log("connected to server " + process.env.PORT);
 });

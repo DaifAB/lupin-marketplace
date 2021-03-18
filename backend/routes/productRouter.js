@@ -1,16 +1,18 @@
 const router = require("express").Router();
 const {
-  productRegister,
+  addProduct,
   getAllProducts,
-  productUpdated,
-  productDeleted,
-  getOneProduct,
+  updateProduct,
+  deleteProduct,
+  getProduct,
 } = require("../controllers/productController");
-const {upload}=require("../middleware/uploadFiles")
-router.get("/", getAllProducts);
-router.post("/",upload.array('picture',3), productRegister);
-router.put("/:id", productUpdated);
-router.delete("/", productDeleted);
-router.get("/:id", getOneProduct);
+
+const { uploadImage }=require("../middleware/uploadFiles")
+
+router.get("/getAll", getAllProducts);
+router.post("/addProduct",uploadImage.array('picture',3), addProduct);
+router.put("/updateProduct/:id", updateProduct);
+router.delete("/deleteProduct/:id", deleteProduct);
+router.get("/:id", getProduct);
 
 module.exports = router;

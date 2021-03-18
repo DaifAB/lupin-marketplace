@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const commandeSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
     id_product: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +14,7 @@ const commandeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "buyers",
     },
-    amount: {
+    totalPrice: {
       type: String,
       required: true,
     },
@@ -27,4 +27,4 @@ const commandeSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Commande", commandeSchema);
+module.exports = mongoose.model("Order", orderSchema);

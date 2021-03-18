@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-const { getAllAds ,adsRegister,adsDelete} = require("../controllers/adsController");
+const { getAllAds ,addAds,deleteAds} = require("../controllers/adsController");
 
-router.get("/", getAllAds);
-router.post('/',adsRegister);
-router.delete("/",adsDelete);
+router.get("/getAll", getAllAds);
+router.post('/add',addAds);
+router.delete("/delete",deleteAds);
 
 module.exports = router;

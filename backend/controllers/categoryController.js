@@ -1,6 +1,6 @@
-const Category = require("..//models/category");
+const Category = require("../models/category");
 
-exports.categoryRegisterer = async (req, res, next) => {
+exports.addCategory = async (req, res, next) => {
   const category = new Category({
     name: req.body.name,
   });
@@ -12,7 +12,7 @@ exports.categoryRegisterer = async (req, res, next) => {
   }
 };
 
-exports.categoryDelete = async (req, res, next) => {
+exports.deleteCategory = async (req, res, next) => {
   try {
     const categoryDelete = await Category.deleteOne({
       _id: req.params.id,
@@ -23,7 +23,7 @@ exports.categoryDelete = async (req, res, next) => {
   }
 };
 
-exports.getOneCat = async (req, res, next) => {
+exports.getCategory = async (req, res, next) => {
   try {
     const category = await Category.findById({ _id: req.params.id });
     res.status(200).send(category);
