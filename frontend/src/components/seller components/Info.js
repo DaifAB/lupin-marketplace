@@ -10,7 +10,7 @@ export default function Info() {
 
     useEffect(() => {
         getSeller()
-      }, [])
+      }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
       const getSeller = async () => {
           await axios.get('http://localhost:5000/seller/getOne/'+seller_id)

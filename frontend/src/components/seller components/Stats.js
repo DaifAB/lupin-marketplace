@@ -22,12 +22,11 @@ export default function Stats() {
 
     useEffect(() => {
       getSeller()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const getSeller = async () => {
         await axios.get('http://localhost:5000/seller/getOne/'+seller_id)
                    .then( response =>{
-                     console.log(response.data);
                      setSeller(response.data)
                    })
                    .catch(error =>{

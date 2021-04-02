@@ -59,7 +59,7 @@ exports.updateProduct = async (req, res, next) => {
 };
 exports.deleteProduct = async (req, res, next) => {
   try {
-    const deletedProduct = await Product.deleteOne({ _id: req.body.id });
+    const deletedProduct = await Product.deleteOne({ _id: req.params.id });
     res.status(201).send(deletedProduct);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -73,3 +73,12 @@ exports.getProduct = async (req, res, next) => {
     res.status(400).send({ message: error.message });
   }
 };
+exports.getProductsByUserId = async (req, res, next) => {
+  try {
+    const products = await Product.find({ id_seller: req.params.id });
+    res.status(201).send(products);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+

@@ -115,7 +115,7 @@ export default function Ads() {
                 <tbody>
                 {ads.map(ad =>{
                       return <tr key={ad._id}>
-                      <td><img alt="" src={`/uploads/${ad.picture}`}/></td>
+                      <td align="center"><img alt="" src={`/uploads/${ad.picture}`}/></td>
                       <td>{ad.pricing}</td>
                       <td>{ad.startDate}</td>
                       <td>{ad.endDate}</td>

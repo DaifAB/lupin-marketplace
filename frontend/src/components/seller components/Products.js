@@ -8,6 +8,7 @@ import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import jwt from 'jwt-decode'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,55 +21,76 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function Products() {
+    const token = localStorage.getItem('token')
+    const decodedToken = jwt(token)
+    const id = decodedToken._id
     const classes = useStyles();
     const {register,handleSubmit} = useForm()
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
+    const [category, setCategory] = useState('');
+    const handleChange = (event) => {
+        setCategory(event.target.value);
+      };
 
     const onSubmit = async (data) =>{
-        console.log(data);
-    //     const token = localStorage.getItem('token')
-    //     const formProduct = new FormData();
-    //     formProduct.append("picture", data.picture[0]);
-    //     formProduct.append("description", data.description);
-    //     formProduct.append("price", data.price);
-    //     formProduct.append("name", data.name);
-    //     formProduct.append("id_category", data.id_category);
+        const formProduct = new FormData();
+        formProduct.append("picture", data.picture[0]);
+        formProduct.append("description", data.description);
+        formProduct.append("price", data.price);
+        formProduct.append("name", data.name);
+        formProduct.append("id_category", category );
 
-    //  await axios.post('http://localhost:5000/product/addProduct',formProduct,{
-    //      headers : {
-    //          "auth-token" : token
-    //      }
-    //  })
-    //     .then(function (response) {
-    //         getProducts()
-    //         store.addNotification({
-    //             title: "Success !",
-    //             message: "Product Added",
-    //             type: "success",
-    //             insert: "top",
-    //             container: "bottom-right",
-    //             animationIn: ["animate__animated", "animate__fadeIn"],
-    //             animationOut: ["animate__animated", "animate__fadeOut"],
-    //             dismiss: {
-    //                 duration: 5000,
-    //                 onScreen: true
-    //             }
-    //             });
+        if (decodedToken.isValid) {
+            await axios.post('http://localhost:5000/product/addProduct',formProduct,{
+         headers : {
+             "auth-token" : token
+         }
+     })
+        .then(function (response) {
+            getProducts()
+            store.addNotification({
+                title: "Success !",
+                message: "Product Added",
+                type: "success",
+                insert: "top",
+                container: "bottom-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+                });
 
-    //       })
-    //       .catch(function (error) {
-    //         console.log(error);
-    // })
+          })
+          .catch(function (error) {
+            console.log(error);
+    })
+        } else {
+            store.addNotification({
+                title: "Error !",
+                message: "Your account is not valid yet ! please wait for an admin to valid your account !",
+                type: "danger",
+                insert: "top",
+                container: "bottom-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+                });
+        }
     }
 
     useEffect(() => {
         getProducts()
         getCategories()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
    async function getProducts() {
-      await axios.get('http://localhost:5000/product/getAll')
+      await axios.get('http://localhost:5000/product/getProductsByUserId/'+id)
        .then(response =>{
            const allProducts = response.data
            setProducts(allProducts)
@@ -88,7 +110,7 @@ export default function Products() {
    }
 
    async function deleteProduct(id){
-        await axios.delete('http://localhost:5000/product/delete/'+id)
+        await axios.delete('http://localhost:5000/product/deleteProduct/'+id)
         .then(function(response){
         getProducts()
         store.addNotification({
@@ -111,7 +133,7 @@ export default function Products() {
    }
     return (
         <div className="ads-container">
-        <h1 style={{textAlign:'center'}}>Add Ads</h1>
+        <h1 style={{textAlign:'center'}}>Add Product</h1>
         <div className="add-ads-form">
             <form className={classes.root} noValidate autoComplete="on" onSubmit={handleSubmit(onSubmit)}>
                 <TextField name="name" label="Name" variant="outlined" inputRef={register} />
@@ -123,9 +145,10 @@ export default function Products() {
                     <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    inputRef={register}
                     label="Category"
                     name="id_category"
+                    value={category}
+                    onChange={handleChange}
                     >
                     {
                         categories.map(category=>{
@@ -139,7 +162,7 @@ export default function Products() {
                 <Button variant="contained"  type="submit" style={{backgroundColor: '#1a1a1a' , color : 'white'}}>Add Product</Button>
             </form>
         </div>
-        <h1 style={{textAlign:'center'}}>Ads List</h1>
+        <h1 style={{textAlign:'center'}}>Products List</h1>
         <Table striped bordered hover>
             <thead>
                 <tr>
@@ -153,7 +176,7 @@ export default function Products() {
             <tbody>
             {products.map(product =>{
                   return <tr key={product._id}>
-                  <td><img alt="" src={`/uploads/${product.picture}`}/></td>
+                  <td align="center"><img alt="" src={`/uploads/${product.picture}`}/></td>
                   <td>{product.name}</td>
                   <td>{product.price}</td>
                   <td>{product.description}</td>
