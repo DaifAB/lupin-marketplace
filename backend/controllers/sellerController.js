@@ -58,6 +58,7 @@ exports.resetPassword = async (req, res, next) => {
         if (result) {
           const hashedPassword = await bcrypt.hash(newPassword, 10);
           seller.password = hashedPassword;
+          seller.isReseted = true
           const newPass = await seller.save();
           res.status(201).send(newPass);
         } else {
@@ -81,16 +82,16 @@ exports.sellerLogin = async (req, res, next) => {
   if (!validPass) return res.status(400).send("Invalid password");
 
   const token = jwt.sign(
-    { _id: seller._id, email: seller.email },
+    { _id: seller._id, email: seller.email ,role :'seller', isReseted : seller.isReseted},
     process.env.SELLER_TOKEN
   );
   res.header("auth-token", token).send(token);
 };
 
 exports.validSeller = async (req, res, next) => {
-  const token = req.header("auth-token");
 
-  const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
+
+  const id_seller = req.body.id_seller
 
   const seller = await Seller.findById({ _id: id_seller });
   res.send(seller);
@@ -131,5 +132,26 @@ exports.sellerPack = async (req, res, next) => {
     seller.turnOver += 20000;
     const updateSeller = await seller.save();
     res.status(201).send(updateSeller);
+  }
+};
+
+
+exports.deleteSeller = async (req, res, next) => {
+  try {
+    const sellerDelete = await Seller.deleteOne({
+      _id: req.params.id,
+    });
+    res.status(201).send(sellerDelete);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+exports.getSeller = async (req, res, next) => {
+  try {
+    const seller = await Seller.findOne({ _id: req.params.id });
+    res.status(201).send(seller);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 };

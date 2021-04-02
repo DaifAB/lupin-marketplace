@@ -6,6 +6,8 @@ const {
   validSeller,
   getAllSellers,
   sellerPack,
+  deleteSeller,
+  getSeller,
 } = require("../controllers/sellerController");
 
 const { verifySellerToken , verifyAdminToken} = require("../controllers/tokenVerfication/verifyToken");
@@ -16,5 +18,7 @@ router.patch("/resetPassword", verifySellerToken, resetPassword);
 router.post("/login", sellerLogin);
 router.patch("/validate",verifyAdminToken , validSeller);
 router.patch("/upgrade", sellerPack);
+router.delete("/delete/:id",deleteSeller)
+router.get("/getOne/:id",getSeller)
 
 module.exports = router;

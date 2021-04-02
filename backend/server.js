@@ -10,6 +10,7 @@ const categoryRouter = require("./routes/categoryRouter");
 const productRouter = require("./routes/productRouter");
 const superAdminRouter = require("./routes/superAdminRouter");
 const orderRouter = require("./routes/orderRouter");
+const deliveryManRouter = require("./routes/deliveryManRouter");
 const cors = require("cors");
 app.use(express.json());
 
@@ -36,6 +37,7 @@ app.use("/ads", adsRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
+app.use("/deliveryMan", deliveryManRouter);
 
 
 app.listen(process.env.PORT, () => {

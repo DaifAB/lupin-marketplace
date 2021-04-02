@@ -36,6 +36,7 @@ exports.verifySuperAdminToken = (req, res, next) => {
   } catch (error) {
     res.status(400).send("Invalid Token");
   }
+  next()
 };
 
 exports.verifyBuyerToken =  (req, res, next) => {

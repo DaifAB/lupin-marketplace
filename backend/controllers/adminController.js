@@ -45,7 +45,7 @@ exports.adminLogin = async (req, res, next) => {
   const validPass = await bcrypt.compare(req.body.password, admin.password);
   if (!validPass) return res.status(400).send("Invalid password");
 
-  const token = jwt.sign({ _id: admin._id, email: admin.email },process.env.ADMIN_TOKEN);
+  const token = jwt.sign({ _id: admin._id, email: admin.email , superAdmin : false },process.env.ADMIN_TOKEN);
   res.header("auth-token", token).send(token);
 };
 
@@ -59,7 +59,7 @@ exports.getAllAdmins = async (req, res, next) => {
 };
 
 exports.deleteAdmin = async (req, res, next) => {
-  const admin = await Admin.findById({ _id: req.body.admin_id });
+  const admin = await Admin.findById({ _id: req.params.id });
 
   if (!admin) {
     res.status(404).send("Admin Not Found");

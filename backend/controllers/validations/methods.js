@@ -19,10 +19,8 @@ async function sendMail(token) {
   if (token.tempPassword) {
     output = `<h2>Félicitations</h2>
   
-  <div>Votre compte a été créer avec succes ! Clique sur lien pour changer votre mot de passe !</br>
-  Votre ot de passe temporaire : ${token.tempPassword} </br>
-  Clique ici : <a> Front end link </a> pour changer votre mot de passe.
-  
+  <div>Votre compte a été créer avec succes !</br>
+  Votre mot de passe temporaire : ${token.tempPassword} </br>
   </div>
   `;
   userEmail =  token.sellerEmail

@@ -11,7 +11,7 @@ exports.getAllAds = async (req, res, next) => {
 
 exports.addAds = async (req, res, next) => {
   const ads = new Ads({
-    picture: req.body.picture,
+    picture: req.files[0].filename,
     pricing: req.body.pricing,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
@@ -27,7 +27,7 @@ exports.addAds = async (req, res, next) => {
 
 exports.deleteAds = async (req, res, next) => {
   try {
-    const deletedAds = await Ads.deleteOne({ _id: req.body._idads });
+    const deletedAds = await Ads.deleteOne({ _id: req.params.id });
     res.send(deletedAds);
   } catch (error) {
     res.status(400).send({ message: error.message });

@@ -6,18 +6,13 @@ exports.addProduct = async (req, res, next) => {
   const token = req.header("auth-token");
   const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
 
-  var pictures = [];
-  for (let i = 0; i < req.files.length; i++) {
-    pictures.push(req.files[i].filename);
-  }
-
   const newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
     id_category: req.body.id_category,
     id_seller: id_seller,
     price: req.body.price,
-    picture: pictures,
+    picture: req.files[0].filename,
   });
   try {
     const product = await newProduct.save();

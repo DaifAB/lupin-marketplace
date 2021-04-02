@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema(
       ref: "sellers",
     },
     picture: {
-      type: [String],
+      type: String,
       required: true,
     },
     price: {

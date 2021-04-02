@@ -44,7 +44,7 @@ exports.superAdminLogin = async (req, res, next) => {
   const validPass = await bcrypt.compare(req.body.password, superAdmin.password);
   if (!validPass) return res.status(400).send("Invalid password");
 
-  const token = jwt.sign({ _id: superAdmin._id, email: superAdmin.email },process.env.SUPER_ADMIN_TOKEN);
+  const token = jwt.sign({ _id: superAdmin._id, email: superAdmin.email  , superAdmin : true},process.env.SUPER_ADMIN_TOKEN);
   res.header("auth-token", token).send(token);
 };
 

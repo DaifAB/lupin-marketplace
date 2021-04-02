@@ -48,7 +48,7 @@ exports.buyerLogin = async (req, res, next) => {
   if (!validPass) return res.status(400).send("Invalid password");
 
 
-  const token = jwt.sign({ _id: buyer._id, email: buyer.email},process.env.BUYER_TOKEN);
+  const token = jwt.sign({ _id: buyer._id, email: buyer.email, role :'buyer'},process.env.BUYER_TOKEN);
   res.header("auth-token", token).send(token);
 
 
@@ -89,5 +89,16 @@ exports.getAllBuyers = async (req, res, next) => {
     res.json(buyers);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteBuyer = async (req, res, next) => {
+  try {
+    const Buyerdelete = await Buyer.deleteOne({
+      _id: req.params.id,
+    });
+    res.status(201).send(Buyerdelete);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 };

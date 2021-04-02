@@ -13,6 +13,10 @@ const sellerSchema = new mongoose.Schema(
     type: {
       type: String,
     },
+    isReseted: {
+      type: Boolean,
+      default : false
+    },
     email: {
       type: String,
       required: true,
