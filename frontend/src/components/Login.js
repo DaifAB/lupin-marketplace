@@ -60,6 +60,7 @@ export default function Login() {
       const token = response.data
       const isReseted = jwt(token).isReseted
       localStorage.setItem('token', token)
+      localStorage.setItem('devise',jwt(token).devise)
 
       if (isReseted) {
         history.push('/Home')
@@ -92,6 +93,7 @@ export default function Login() {
     })
     .then(function (response) {
         localStorage.setItem('token', response.data)
+        localStorage.setItem('devise',jwt(response.data).devise)
         history.push('/Home')
       })
       .catch(function (error) {
@@ -116,7 +118,7 @@ export default function Login() {
 
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" >
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

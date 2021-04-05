@@ -20,6 +20,26 @@ export default function MarketPlace() {
     const [products, setProducts] = useState([])
     const classes = useStyles();
     const [page,setPage] = useState(1)
+    const [devise , setDevise] = useState(0)
+    const currency = localStorage.getItem('devise')
+
+    const getDevise = async () =>{
+
+        await axios.get('http://data.fixer.io/api/latest?access_key=4f5525326e240bf147fc0c19db68f087')
+                   .then(response => {
+                       console.log(response.data.rates);
+                       if(currency){
+                           setDevise(response.data.rates[currency])
+                       }else{
+                           setDevise(response.data.rates.USD)
+                       }
+                   })
+                   .catch(err => {
+                       console.log(err);
+                   })
+    }
+
+
 
     const next = () => {
         setPage(page+1)
@@ -44,6 +64,7 @@ export default function MarketPlace() {
 
      useEffect(() => {
         getProducts(page)
+        getDevise()
     }, [page]) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <div className="fluid-container products-container">
@@ -61,7 +82,15 @@ export default function MarketPlace() {
                             <h3 className="text-xl font-bold pb-2">{product.name}</h3>
                             <p className="truncate text-gray-500 text-sm">{product.description}</p>
                             <div className="flex justify-between items-center">
-                                <span className="text-gray-400 text-xs">{product.price} $</span>
+                                <span className="text-gray-400 text-xs">{Number(product.price*devise).toFixed(2)}
+                                {
+                                    currency === 'USD' ? (
+                                         <span>$</span>
+                                    ) : (
+                                        <span>€</span>
+                                    )
+                                }
+                                </span>
                             </div>
                             </div>
                         </div>

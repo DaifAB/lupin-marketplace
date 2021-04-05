@@ -42,6 +42,10 @@ const sellerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    devise: {
+      type: String,
+      default: "EUR",
+    }
   },
   {
     timestamps: true,

@@ -48,7 +48,7 @@ exports.buyerLogin = async (req, res, next) => {
   if (!validPass) return res.status(400).send("Invalid password");
 
 
-  const token = jwt.sign({ _id: buyer._id, email: buyer.email, role :'buyer'},process.env.BUYER_TOKEN);
+  const token = jwt.sign({ _id: buyer._id, email: buyer.email, role :'buyer' , devise : buyer.devise},process.env.BUYER_TOKEN);
   res.header("auth-token", token).send(token);
 
 

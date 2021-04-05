@@ -82,7 +82,7 @@ exports.sellerLogin = async (req, res, next) => {
   if (!validPass) return res.status(400).send("Invalid password");
 
   const token = jwt.sign(
-    { _id: seller._id, email: seller.email ,role :'seller', isReseted : seller.isReseted , isValid : seller.isValid},
+    { _id: seller._id, email: seller.email ,role :'seller', isReseted : seller.isReseted , isValid : seller.isValid , devise : seller.devise},
     process.env.SELLER_TOKEN
   );
   res.header("auth-token", token).send(token);

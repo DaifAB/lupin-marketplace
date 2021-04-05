@@ -24,7 +24,7 @@ const buyerSchema = new mongoose.Schema(
     },
     devise: {
       type: String,
-      default: "USD",
+      default: "EUR",
     },
     address: {
       type: String,

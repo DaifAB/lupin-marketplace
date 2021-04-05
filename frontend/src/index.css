@@ -149,3 +149,24 @@
     height: 250px;
     width: 800px;
 }
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  } 
+body {
+  top: 0px  !important;
+  }
+.goog-logo-link, .goog-logo-link:link, .goog-logo-link:visited, .goog-logo-link:hover, .goog-logo-link:active {
+      display: none;
+    }
+    .goog-te-gadget .goog-te-combo{
+      border-radius: 15px;
+      color: white;
+      background: none;
+      outline: none;
+      margin-right: 20px;
+    }
+.goog-te-gadget .goog-te-combo option{
+      background-color: #2F2F2F;
+    }
+   

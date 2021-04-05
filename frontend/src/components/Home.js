@@ -12,6 +12,7 @@ import ResetPassword from './ResetPassword';
 import MarketPlace from './MarketPlace';
 import Product from './Product';
 import AdsCarousel from './AdsCarousel';
+import { FormControl, InputLabel, Select } from '@material-ui/core';
 
 
 
@@ -30,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Home({history}) {
     const classes = useStyles();
     const token = localStorage.getItem('token')
+
+
+    const handleChange = (event) => {
+      localStorage.setItem('devise',event.target.value)
+      window.location.reload()
+    };
 
     let role;
     let decodedToken;
@@ -51,6 +58,24 @@ export default function Home({history}) {
           <Typography variant="h4" className={classes.title}>
             BENJAMIN MARKETPLACE
           </Typography>
+          <div  id="google_translate_element"></div>
+          <FormControl variant="outlined" className={classes.formControl} style={{marginRight : '20px'}}>
+            <InputLabel htmlFor="outlined-age-native-simple" style={{color : 'white'}}>Devise</InputLabel>
+            <Select
+              native
+              onChange={handleChange}
+              label="Devise"
+              inputProps={{
+                name: 'devise',
+                id: 'outlined-age-native-simple',
+              }}
+              style={{border: '1px solid white', color : 'white'}}
+            >
+              <option aria-label="" value="" />
+              <option value={'EUR'} style={{color : 'black'}}>EUR</option>
+              <option value={'USD'} style={{color : 'black'}}>USD</option>
+            </Select>
+          </FormControl>
             {token ? (
                 <>
                 {role === 'seller' ? (

@@ -68,7 +68,7 @@ export default function Products() {
             getProducts(page)
             store.addNotification({
                 title: "Success !",
-                message: "Product Added",
+                message: response.data,
                 type: "success",
                 insert: "top",
                 container: "bottom-right",
