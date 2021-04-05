@@ -4,19 +4,42 @@ import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { IconButton, makeStyles } from '@material-ui/core';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(2),
+      width: '35ch',
+    },
+  },
+}));
 
 export default function Sellers() {
-
+    const classes = useStyles();
     const [sellers, setSellers] = useState([])
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        fetchData(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            fetchData(page)
+        }
+    }
 
 
           useEffect(() => {
-              fetchData()
-          }, [])
+              fetchData(page)
+          }, [page])
 
-          function fetchData() {
-              axios.get('http://localhost:5000/seller/getAll')
+          function fetchData(page) {
+              axios.get(`http://localhost:5000/seller/get/?page=${page}&limit=2`)
              .then(response =>{
                  const allSellers = response.data
                  setSellers(allSellers)
@@ -38,7 +61,7 @@ async function validateSeller(id) {
           }
     })
     .then(function (response) {
-        fetchData()
+        fetchData(page)
         store.addNotification({
             title: "Success !",
             message: "Seller account validated",
@@ -76,7 +99,7 @@ async function validateSeller(id) {
 async function deleteSeller(id){
     await axios.delete('http://localhost:5000/seller/delete/'+id)
                .then(function(response){
-                fetchData()
+                fetchData(page)
                 store.addNotification({
                   title: "Success !",
                   message: "Seller Deleted",
@@ -126,6 +149,15 @@ async function deleteSeller(id){
 
                 </tbody>
             </Table>
+            <div className="pagination">
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+              <ArrowBackIosIcon fontSize="inherit" />
+            </IconButton>
+            <p>Page : {page}</p>
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+              <ArrowForwardIosIcon fontSize="inherit" />
+            </IconButton>
+            </div>
                 </div>
 
     )

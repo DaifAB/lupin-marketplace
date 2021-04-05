@@ -113,27 +113,27 @@ exports.getAllSellers = async (req, res, next) => {
   }
 };
 
-exports.sellerPack = async (req, res, next) => {
-  const token = req.header("auth-token");
+// exports.sellerPack = async (req, res, next) => {
+//   const token = req.header("auth-token");
 
-  const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
+//   const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
 
-  const type = req.body.type;
+//   const type = req.body.type;
 
-  const seller = await Seller.findById({ _id: id_seller });
-  if (type == "Pro") {
-    seller.type = type;
-    seller.turnOver += 5000;
+//   const seller = await Seller.findById({ _id: id_seller });
+//   if (type == "Pro") {
+//     seller.type = type;
+//     seller.turnOver += 5000;
 
-    const updateSeller = await seller.save();
-    res.status(201).send(updateSeller);
-  } else if (type == "Expert") {
-    seller.type = type;
-    seller.turnOver += 20000;
-    const updateSeller = await seller.save();
-    res.status(201).send(updateSeller);
-  }
-};
+//     const updateSeller = await seller.save();
+//     res.status(201).send(updateSeller);
+//   } else if (type == "Expert") {
+//     seller.type = type;
+//     seller.turnOver += 20000;
+//     const updateSeller = await seller.save();
+//     res.status(201).send(updateSeller);
+//   }
+// };
 
 
 exports.deleteSeller = async (req, res, next) => {
@@ -151,6 +151,53 @@ exports.getSeller = async (req, res, next) => {
   try {
     const seller = await Seller.findOne({ _id: req.params.id });
     res.status(201).send(seller);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+exports.getSellersPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const sellers = await Seller.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(sellers)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}
+exports.sellerPack = async (req, res, next) => {
+  const seller = await Seller.findById({ _id: req.params.id });
+
+  if (!seller) {
+    res.status(404).send({ message: "Seller not found" });
+  }
+
+  seller.turnOver += req.body.turnOver;
+  seller.type = req.body.type;
+
+  try {
+    const sellerUpdated = await seller.save();
+    res.status(201).send(sellerUpdated);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+exports.updateTurnOver = async (req, res, next) => {
+  const seller = await Seller.findById({ _id: req.params.id });
+
+  if (!seller) {
+    res.status(404).send({ message: "Seller not found" });
+  }
+
+  seller.turnOver += req.body.turnOver;
+
+  try {
+    const sellerUpdated = await seller.save();
+    res.status(201).send(sellerUpdated);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }

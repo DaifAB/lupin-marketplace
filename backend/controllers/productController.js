@@ -1,10 +1,15 @@
 require("dotenv").config();
 const Product = require("../models/product");
 const jwt = require("jsonwebtoken");
+const Seller = require("../models/Seller");
 
 exports.addProduct = async (req, res, next) => {
   const token = req.header("auth-token");
   const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
+
+  const seller = await Seller.findOne({_id : id_seller})
+
+
 
   const newProduct = new Product({
     name: req.body.name,
@@ -14,8 +19,11 @@ exports.addProduct = async (req, res, next) => {
     price: req.body.price,
     picture: req.files[0].filename,
   });
+
+  seller.productsCount += 1;
   try {
     const product = await newProduct.save();
+    const updatedSeller = await seller.save()
     res.status(201).send(product);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -58,8 +66,15 @@ exports.updateProduct = async (req, res, next) => {
   }
 };
 exports.deleteProduct = async (req, res, next) => {
+  const token = req.header("auth-token");
+  const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
+
+  const seller = await Seller.findOne({_id : id_seller})
+
+  seller.productsCount -= 1
   try {
     const deletedProduct = await Product.deleteOne({ _id: req.params.id });
+    const updatedSeller = await seller.save()
     res.status(201).send(deletedProduct);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -81,4 +96,29 @@ exports.getProductsByUserId = async (req, res, next) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+exports.getProdPaginBySeller =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const products = await Product.find({id_seller: req.params.id})
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(products)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}
+exports.getProdPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const products = await Product.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(products)
+  }catch(error){
+    res.send(error)
+  }
+
+}
 

@@ -7,7 +7,9 @@ import axios from 'axios';
 import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { FormControl, IconButton, InputLabel, MenuItem, Select } from '@material-ui/core';
 import jwt from 'jwt-decode'
 
 
@@ -29,6 +31,21 @@ export default function Products() {
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState('');
+
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        getProducts(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            getProducts(page)
+        }
+    }
+
+
     const handleChange = (event) => {
         setCategory(event.target.value);
       };
@@ -48,7 +65,7 @@ export default function Products() {
          }
      })
         .then(function (response) {
-            getProducts()
+            getProducts(page)
             store.addNotification({
                 title: "Success !",
                 message: "Product Added",
@@ -84,13 +101,9 @@ export default function Products() {
         }
     }
 
-    useEffect(() => {
-        getProducts()
-        getCategories()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-   async function getProducts() {
-      await axios.get('http://localhost:5000/product/getProductsByUserId/'+id)
+   async function getProducts(page) {
+      await axios.get(`http://localhost:5000/product/get/${id}?page=${page}&limit=2`)
        .then(response =>{
            const allProducts = response.data
            setProducts(allProducts)
@@ -110,9 +123,13 @@ export default function Products() {
    }
 
    async function deleteProduct(id){
-        await axios.delete('http://localhost:5000/product/deleteProduct/'+id)
+        await axios.delete('http://localhost:5000/product/deleteProduct/'+id,{
+            headers : {
+                "auth-token" : token
+            }
+        })
         .then(function(response){
-        getProducts()
+        getProducts(page)
         store.addNotification({
         title: "Success !",
         message: "Product Deleted",
@@ -131,6 +148,12 @@ export default function Products() {
         console.log(error);
         })
    }
+
+   useEffect(() => {
+    getProducts(page)
+    getCategories()
+}, [page]) // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <div className="ads-container">
         <h1 style={{textAlign:'center'}}>Add Product</h1>
@@ -186,6 +209,15 @@ export default function Products() {
               }
             </tbody>
         </Table>
+        <div className="pagination">
+        <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+          <ArrowBackIosIcon fontSize="inherit" />
+        </IconButton>
+        <p>Page : {page}</p>
+        <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+          <ArrowForwardIosIcon fontSize="inherit" />
+        </IconButton>
+        </div>
     </div>
     )
 }

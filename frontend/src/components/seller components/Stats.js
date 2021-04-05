@@ -123,7 +123,7 @@ export default function Stats() {
                             <div className="flex space-x-2 items-center">
                               {seller.isValid ? (
                                 <div className="text-2xl text-green-800 bg-green-200 rounded-md p-1">
-                                yes
+                                Yes
                               </div>
                               ) : (
                                 <div className="text-2xl text-green-800 bg-red-200 rounded-md p-1">

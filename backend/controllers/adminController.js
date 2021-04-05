@@ -52,9 +52,9 @@ exports.adminLogin = async (req, res, next) => {
 exports.getAllAdmins = async (req, res, next) => {
   try {
     const admins = await Admin.find();
-    res.json(admins);
+    res.send(admins);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send(error);
   }
 };
 
@@ -69,3 +69,17 @@ exports.deleteAdmin = async (req, res, next) => {
     res.send(deletedAdmin)
   }
 };
+
+
+exports.getAdminsPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const admins = await Admin.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(admins)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}

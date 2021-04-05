@@ -56,3 +56,16 @@ exports.updateCategory = async (req, res, next) => {
     }
   }
 };
+
+exports.getCategPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const categories = await Category.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(categories)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}

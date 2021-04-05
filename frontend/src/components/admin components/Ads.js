@@ -7,6 +7,9 @@ import axios from 'axios';
 import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { IconButton } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +25,19 @@ export default function Ads() {
     const classes = useStyles();
     const {register,handleSubmit} = useForm()
     const [ads, setAds] = useState([])
+
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        fetchData(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            fetchData(page)
+        }
+    }
 
     const onSubmit = async (data) =>{
         const formAds = new FormData();
@@ -53,11 +69,11 @@ export default function Ads() {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(page)
+    }, [page])
 
-   async function fetchData() {
-      await axios.get('http://localhost:5000/ads/getAll')
+   async function fetchData(page) {
+      await axios.get(`http://localhost:5000/ads/get/?page=${page}&limit=2`)
        .then(response =>{
            const allAds = response.data
            setAds(allAds)
@@ -69,7 +85,7 @@ export default function Ads() {
    async function deleteAd(id){
         await axios.delete('http://localhost:5000/ads/delete/'+id)
         .then(function(response){
-        fetchData()
+        fetchData(page)
         store.addNotification({
         title: "Success !",
         message: "Ad Deleted",
@@ -125,6 +141,15 @@ export default function Ads() {
                   }
                 </tbody>
             </Table>
+            <div className="pagination">
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+            <ArrowBackIosIcon fontSize="inherit" />
+            </IconButton>
+            <p>Page : {page}</p>
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+            <ArrowForwardIosIcon fontSize="inherit" />
+            </IconButton>
+        </div>
         </div>
     )
 }

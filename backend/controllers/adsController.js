@@ -33,3 +33,16 @@ exports.deleteAds = async (req, res, next) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+exports.getAdsPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const ads = await Ads.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(ads)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}

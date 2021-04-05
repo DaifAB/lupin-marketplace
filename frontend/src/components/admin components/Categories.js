@@ -8,6 +8,9 @@ import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
+import { IconButton } from '@material-ui/core';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,14 +27,26 @@ export default function Categories() {
     const {register,handleSubmit} = useForm('')
     const [categories, setCategories] = useState([])
     const [name, setName] = useState('')
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        fetchData(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            fetchData(page)
+        }
+    }
 
 
           useEffect(() => {
-              fetchData()
-          }, [])
+              fetchData(page)
+          }, [page])
 
-          function fetchData() {
-              axios.get('http://localhost:5000/category/getAll')
+          function fetchData(page) {
+              axios.get(`http://localhost:5000/category/get/?page=${page}&limit=2`)
              .then(response =>{
                  const allCategories = response.data
                  setCategories(allCategories)
@@ -47,7 +62,7 @@ export default function Categories() {
             name : data.name,
         })
         .then(function (response) {
-          fetchData()
+          fetchData(page)
             store.addNotification({
                 title: "Success !",
                 message: "Category Added",
@@ -104,7 +119,7 @@ export default function Categories() {
               }
         })
           .then(function(response){
-          fetchData()
+          fetchData(page)
           store.addNotification({
             title: "Success !",
             message: "Category updated",
@@ -127,7 +142,7 @@ export default function Categories() {
    async function deleteCategory(id){
         await axios.delete('http://localhost:5000/category/deleteCategory/'+id)
                    .then(function(response){
-                    fetchData()
+                    fetchData(page)
                     store.addNotification({
                       title: "Success !",
                       message: "Category Deleted",
@@ -175,6 +190,15 @@ export default function Categories() {
                   }
                 </tbody>
                 </Table>
+                <div className="pagination">
+                  <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+                    <ArrowBackIosIcon fontSize="inherit" />
+                  </IconButton>
+                  <p>Page : {page}</p>
+                  <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+                    <ArrowForwardIosIcon fontSize="inherit" />
+                  </IconButton>
+                </div>
                 </div>
 
     )

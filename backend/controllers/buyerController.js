@@ -102,3 +102,16 @@ exports.deleteBuyer = async (req, res, next) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+exports.getBuyersPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const buyers = await Buyer.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(buyers)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}

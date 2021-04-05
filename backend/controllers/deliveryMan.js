@@ -50,3 +50,16 @@ exports.deleteDeliveryMen = async (req, res, next) => {
     res.send(deletedDeliveryMan)
   }
 };
+
+exports.getDeliveryMenPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const deliveryMen = await DeliveryMan.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(deliveryMen)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}

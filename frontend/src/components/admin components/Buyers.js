@@ -3,19 +3,43 @@ import axios from 'axios';
 import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
+import { IconButton, makeStyles } from '@material-ui/core';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(2),
+        width: '35ch',
+      },
+    },
+  }));
 
 
 export default function Buyers() {
-
+    const classes = useStyles();
     const [buyers, setBuyers] = useState([])
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        fetchData(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            fetchData(page)
+        }
+    }
 
 
           useEffect(() => {
-              fetchData()
-          }, [])
+              fetchData(page)
+          }, [page])
 
-          function fetchData() {
-              axios.get('http://localhost:5000/buyer/getAll')
+          function fetchData(page) {
+              axios.get(`http://localhost:5000/buyer/get/?page=${page}&limit=2`)
              .then(response =>{
                  const allBuyers = response.data
                  setBuyers(allBuyers)
@@ -30,7 +54,7 @@ export default function Buyers() {
 async function deleteBuyer(id){
     await axios.delete('http://localhost:5000/buyer/delete/'+id)
                .then(function(response){
-                fetchData()
+                fetchData(page)
                 store.addNotification({
                   title: "Success !",
                   message: "Buyer Deleted",
@@ -76,6 +100,15 @@ async function deleteBuyer(id){
 
                 </tbody>
             </Table>
+            <div className="pagination">
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+            <ArrowBackIosIcon fontSize="inherit" />
+            </IconButton>
+            <p>Page : {page}</p>
+            <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+            <ArrowForwardIosIcon fontSize="inherit" />
+            </IconButton>
+            </div>
                 </div>
 
     )

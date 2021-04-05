@@ -1,6 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import jwt from 'jwt-decode'
+import BuyPack from './BuyPack'
 
 export default function Pack() {
+    const sellerToken = localStorage.getItem("token");
+    const _idSeller = jwt(sellerToken)._id;
+  
+    const [showPaypalButton1, setShowPayPalButton1] = useState(false);
+    const [showPaypalButton2, setShowPayPalButton2] = useState(false);
+    const [turnOver, setTurnOver] = useState(0);
+    const [id, setId] = useState(undefined);
+    const [type, setType] = useState("");
+
+    
+  
+    const pay1 = (e) => {
+      e.preventDefault();
+      setShowPayPalButton1(true);
+      setShowPayPalButton2(false);
+      setTurnOver(499);
+      setType("Expert");
+    };
+    const pay2 = (e) => {
+      e.preventDefault();
+      setShowPayPalButton2(true);
+      setShowPayPalButton1(false);
+      setTurnOver(299);
+      setType("Pro");
+    };
+
+    console.log(turnOver);
+    console.log(type);
+    useEffect(() => {
+      setId(_idSeller);
+    }, [_idSeller]);
     return (
         <div>
             <section className="ml-5">
@@ -92,10 +125,13 @@ export default function Pack() {
                             <div className="block flex items-center p-8  uppercase">
                             <button className="mt-3 text-lg font-semibold 
                 bg-black w-full text-white rounded-lg 
-                px-6 py-3 block shadow-xl hover:bg-gray-700">
+                px-6 py-3 block shadow-xl hover:bg-gray-700" onClick={pay1}>
                                 Select
                             </button>
                             </div>
+                            {showPaypalButton1 && (
+                                    <BuyPack type={type} turnOver={turnOver} id={id} />
+                                    )}
                         </div>
                         <div className="w-11/12 max-w-sm sm:w-3/5 lg:w-1/3 sm:my-5 my-8 relative z-0 rounded-lg shadow-lg md:-ml-4">
                             <div className="bg-white text-black rounded-lg shadow-inner shadow-lg overflow-hidden">
@@ -132,10 +168,13 @@ export default function Pack() {
                             <div className="block flex items-center p-8  uppercase">
                                 <button className="mt-3 text-lg font-semibold 
                 bg-black w-full text-white rounded-lg 
-                px-6 py-3 block shadow-xl hover:bg-gray-700">
+                px-6 py-3 block shadow-xl hover:bg-gray-700" onClick={pay2}>
                                 Select
                                 </button>
                             </div>
+                                {showPaypalButton2 && (
+                                    <BuyPack type={type} turnOver={turnOver} id={id} />
+                                    )}
                             </div>
                         </div>
                         </div>

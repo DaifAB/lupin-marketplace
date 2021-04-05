@@ -9,6 +9,9 @@ import axios from 'axios';
 import { store } from 'react-notifications-component';
 import Table from 'react-bootstrap/Table'
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { IconButton } from '@material-ui/core';
 
 
 
@@ -27,6 +30,19 @@ export default function Admins() {
     const isSuperAdmin = jwt(token).superAdmin
     const [admins, setAdmins] = useState([])
 
+    const [page,setPage] = useState(1)
+
+    const next = () => {
+        setPage(page+1)
+        fetchData(page)
+    }
+    const prev = () => {
+        if(page !== 1){
+            setPage(page-1)
+            fetchData(page)
+        }
+    }
+
     const onSubmit = async (data) =>{
 
      await axios.post('http://localhost:5000/admin/add',{
@@ -35,9 +51,13 @@ export default function Admins() {
         phone: data.phone,
         password: data.password,
         address: data.address,
-     })
+     },{
+        headers : {
+            'auth-token' : token
+        }
+    })
         .then(function (response) {
-            fetchData()
+            fetchData(page)
             store.addNotification({
                 title: "Success !",
                 message: "Admin Added",
@@ -59,11 +79,15 @@ export default function Admins() {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(page)
+    }, [page])// eslint-disable-line react-hooks/exhaustive-deps
 
-   async function fetchData() {
-      await axios.get('http://localhost:5000/admin/getAll')
+   async function fetchData(page) {
+      await axios.get(`http://localhost:5000/admin/get/?page=${page}&limit=2`,{
+          headers : {
+              'auth-token' : token
+          }
+      })
        .then(response =>{
            const allAdmins = response.data
            setAdmins(allAdmins)
@@ -75,7 +99,7 @@ export default function Admins() {
     async function deleteAdmin(id){
         await axios.delete('http://localhost:5000/admin/deleteAdmin/'+id)
                     .then(function(response){
-                    fetchData()
+                    fetchData(page)
                     store.addNotification({
                     title: "Success !",
                     message: "Admin Deleted",
@@ -135,6 +159,15 @@ export default function Admins() {
                         }
                         </tbody>
                     </Table>
+                    <div className="pagination">
+                    <IconButton aria-label="delete" className={classes.margin} size="small" onClick={prev}>
+                    <ArrowBackIosIcon fontSize="inherit" />
+                    </IconButton>
+                    <p>Page : {page}</p>
+                    <IconButton aria-label="delete" className={classes.margin} size="small" onClick={next}>
+                    <ArrowForwardIosIcon fontSize="inherit" />
+                    </IconButton>
+        </div>
             </div>
             ) : (
                 <div className="admins-container">

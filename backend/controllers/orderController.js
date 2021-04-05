@@ -9,7 +9,7 @@ exports.addOrder = async (req, res, next) => {
   const newOrder = new Order({
     id_product: req.body.id_product,
     id_seller: req.body.id_seller,
-    id_buyer: req.body.id_buyer,
+    id_buyer: id_buyer,
     totalPrice: totalPrice,
     address: req.body.address
   });
@@ -38,3 +38,16 @@ exports.getOrder = async (req, res, next) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+exports.getOrdersPagin =  async (req,res) => {
+  const {page,limit} =req.query;
+  try{
+    const orders = await Order.find()
+    .limit(limit*1)
+    .skip((page -1)*limit).exec()
+    res.send(orders)
+  }catch(error){
+    res.send(error)
+  }
+ 
+}
