@@ -28,7 +28,7 @@ async function sendMail(token) {
     output = `<h2>Félicitations</h2>
    
    <div>Votre compte a été créer avec succes ! Clique sur lien pour la valider!
-   <a>${process.env.CLIENT_URL + "/buyer/validation/" + token}</a>
+   <a href=${process.env.CLIENT_URL + "/buyer/validation/" + token}>Cliquez ici !</a>
    </div>
    `;
    userEmail =  jwt.verify(token, process.env.BUYER_TOKEN).email

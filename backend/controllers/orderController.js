@@ -10,7 +10,7 @@ exports.addOrder = async (req, res, next) => {
     id_product: req.body.id_product,
     id_seller: req.body.id_seller,
     id_buyer: id_buyer,
-    totalPrice: totalPrice,
+    totalPrice: req.body.totalPrice,
     address: req.body.address
   });
   try {

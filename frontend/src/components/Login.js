@@ -16,6 +16,7 @@ import { useHistory} from "react-router-dom";
 import { store } from 'react-notifications-component';
 import jwt from 'jwt-decode'
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -118,7 +119,7 @@ export default function Login() {
 
 
   return (
-    <Container component="main" maxWidth="xs" >
+    <Container component="main" maxWidth="xs" className="mb-5">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -169,7 +170,7 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item>
-            <Button color="inherit" href="/Signup">Don't have an account? Sign Up</Button>
+            <Link color="inherit" to="/Signup">Don't have an account? Sign Up</Link>
             </Grid>
           </Grid>
         </form>

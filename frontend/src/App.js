@@ -19,10 +19,12 @@ function App() {
         <Route path="/Admin/Delivery" exact component={AdminDashboard}/>
         <Route path="/Admin/Orders" exact component={AdminDashboard}/>
         <Route path="/Admin/Admins" exact component={AdminDashboard}/>
+
         <Route path="/Seller/Dashboard" exact component={SellerDashboard}/>
         <Route path="/Seller/Info" exact component={SellerDashboard}/>
         <Route path="/Seller/Products" exact component={SellerDashboard}/>
         <Route path="/Seller/Packs" exact component={SellerDashboard}/>
+
         <Route path="/Home" exact component={Home}/>
         <Route path="/Login" exact component={Home}/>
         <Route path="/Signup" exact component={Home}/>

@@ -71,7 +71,7 @@ export default function MarketPlace() {
             <div className="all-products">
                 {
                     products.map(product =>{
-                return  <div className="flex flex-col justify-between w-72 sm:w-96 h-96 bg-white bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer mt-5" style={{backgroundImage: 'url(/uploads/' + product.picture + ')'}}>
+                return  <div className="flex flex-col justify-between w-72 sm:w-96 h-96 bg-white bg-center text-gray-800 shadow-md overflow-hidden cursor-pointer mt-5" style={{backgroundImage: 'url(/uploads/' + product.picture + ')'}} key={product._id}>
                             <div className="flex justify-between items-center ml-4 pr-8">
                                 <Link to={`/Product/${product._id}`} >
                                   <div className="bg-red-600 text-white bg-opacity-95 shadow px-2 py-1 flex items-center font-bold text-xs rounded">More informations</div>

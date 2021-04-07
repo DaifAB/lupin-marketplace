@@ -23,7 +23,7 @@ export default function AdsCarousel(){
         <Carousel>
             {
                 ads.map(ad => {
-                    return <div className="carousel-ads-container">
+                    return <div className="carousel-ads-container" key={ad._id}>
                         <img alt="" src={`/uploads/${ad.picture}`}/>
                     </div>
                 })

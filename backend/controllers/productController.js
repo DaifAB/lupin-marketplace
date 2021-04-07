@@ -104,8 +104,9 @@ exports.updateProduct = async (req, res, next) => {
   }
 };
 exports.deleteProduct = async (req, res, next) => {
-  const token = req.header("auth-token");
-  const id_seller = jwt.verify(token, process.env.SELLER_TOKEN)._id;
+
+  const product = await Product.findOne({_id : req.params.id})
+  const id_seller = product.id_seller
 
   const seller = await Seller.findOne({_id : id_seller})
 

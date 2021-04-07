@@ -1,11 +1,21 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import BuyProduct from './BuyProduct'
+import jwt from 'jwt-decode'
 
 export default function Product({match}) {
     const product_id = match.params.id 
     const [product, setProduct] = useState({})
+    const token = localStorage.getItem('token')
+    let id_buyer;
+    let buyer_address;
+    let role;
 
-    
+    if (token) {
+         id_buyer = jwt(localStorage.getItem('token'))._id
+         buyer_address = jwt(localStorage.getItem('token')).address
+         role = jwt(token).role
+    }
 
     const getProduct = async (product_id) => {
         await axios.get('http://localhost:5000/product/getProductById/'+product_id)
@@ -15,6 +25,39 @@ export default function Product({match}) {
                    .catch(err => {
                        console.log(err);
                    })
+    }
+
+    const addOrder = async () => {
+        await axios.post('http://localhost:5000/order/add',{
+            id_product: product._id,
+            id_seller: product.id_seller,
+            id_buyer: id_buyer,
+            totalPrice: product.price,
+            address:buyer_address
+        },{
+            headers : {
+                'auth-token' : token
+            }
+        }).then(resp => {
+            console.log(resp);
+        }).catch(err =>{
+            console.log(err.response.data);
+        })
+
+        await axios
+            .patch("http://localhost:5000/seller/updateTurnOver/" + product.id_seller, {
+                turnOver: product.price
+            })
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+        await axios
+            .delete("http://localhost:5000/product/deleteProduct/" + product_id)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err.response));
     }
 
     useEffect(() => {
@@ -51,8 +94,15 @@ export default function Product({match}) {
                         <p className="leading-relaxed">{product.description}</p>
                         <div className="flex">
                         <span className="title-font font-medium text-2xl text-gray-900">{product.price} $</span>
-                        <button className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Checkout</button>
+                        
                         </div>
+                        {
+                            role === 'buyer' ? (
+                                <BuyProduct totalPrice={product.price} addOrder={addOrder} />
+                            ) : (
+                                <h4 className="mt-5">Please login as a buyer <br /> if you want to buy</h4>
+                            )
+                        }
                     </div>
                     </div>
                 </div>
