@@ -35,7 +35,7 @@ export default function Home({history}) {
 
     const handleChange = (event) => {
       localStorage.setItem('devise',event.target.value)
-      window.location.reload()
+      history.push('/')
     };
 
     let role;
@@ -76,6 +76,7 @@ export default function Home({history}) {
               <option aria-label="" value="" />
               <option value={'EUR'} style={{color : 'black'}}>EUR</option>
               <option value={'USD'} style={{color : 'black'}}>USD</option>
+              <option value={'MAD'} style={{color : 'black'}}>MAD</option>
             </Select>
           </FormControl>
             {token ? (

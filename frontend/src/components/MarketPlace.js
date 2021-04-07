@@ -86,9 +86,11 @@ export default function MarketPlace() {
                                 {
                                     currency === 'USD' ? (
                                          <span>$</span>
-                                    ) : (
+                                    ) : currency === 'EUR' ?  (
                                         <span>€</span>
-                                    )
+                                    ) : currency === 'MAD' ? (
+                                        <span>DH</span>
+                                    ) : (<></>)
                                 }
                                 </span>
                             </div>
