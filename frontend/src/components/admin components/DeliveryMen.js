@@ -111,7 +111,7 @@ export default function DeliveryMen() {
     return (
 
             <div className="admins-container" >
-                <h1 style={{textAlign:'center'}}>Add Admin</h1>
+                <h1 style={{textAlign:'center'}}>Add Delivery Man</h1>
                 <div className="add-admin-form">
                     <form className={classes.root} noValidate autoComplete="on" onSubmit={handleSubmit(onSubmit)}>
                         <TextField name="full_name" label="Full Name" variant="outlined" inputRef={register} />
