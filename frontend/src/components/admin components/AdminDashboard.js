@@ -23,6 +23,7 @@ import Ads from './Ads';
 import DeliveryMen from './DeliveryMen';
 import Admins from './Admins';
 import Orders from './Orders';
+import AuctionProduct from './AuctionProduct';
 
 
 
@@ -181,6 +182,7 @@ export default function AdminDashboard({history}) {
             <Route path="/Admin/Delivery" exact component={DeliveryMen}/>
             <Route path="/Admin/Admins" exact component={Admins}/>
             <Route path="/Admin/Orders" exact component={Orders}/>
+            <Route path="/Admin/Auction" exact component={AuctionProduct}/>
 
             </Grid>
           </Container>

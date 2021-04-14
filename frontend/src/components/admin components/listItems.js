@@ -10,6 +10,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import { Link } from 'react-router-dom'
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 const navStyle = {
     color : 'black',
@@ -73,6 +74,14 @@ export const mainListItems = (
             <SupervisorAccountIcon />
         </ListItemIcon>
         <ListItemText primary="Admins" />
+        </ListItem>
+    </Link>
+    <Link to='/Admin/Auction' style={navStyle}>
+        <ListItem button>
+        <ListItemIcon>
+            <AccountBalanceIcon />
+        </ListItemIcon>
+        <ListItemText primary="Auction" />
         </ListItem>
     </Link>
   </div>

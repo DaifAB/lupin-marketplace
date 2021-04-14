@@ -12,6 +12,7 @@ import ResetPassword from './ResetPassword';
 import MarketPlace from './MarketPlace';
 import Product from './Product';
 import AdsCarousel from './AdsCarousel';
+import Auction from './Auction';
 import { FormControl, InputLabel, Select } from '@material-ui/core';
 
 
@@ -85,6 +86,10 @@ export default function Home({history}) {
                     <Link color="inherit" to="/Seller/Dashboard" style={{color : 'white', textDecoration: 'none'}}>DASHBOARD</Link>
                 ) : (<></>)
                 }
+                {role === 'buyer' ? (
+                    <Link color="inherit" to="/Auction" style={{color : 'white', textDecoration: 'none', marginLeft : '10px'}}>AUCTIONS</Link>
+                ) : (<></>)
+                }
                 <Button color="inherit" onClick={logOut}>LOG OUT</Button>
                 </>
             ) : (
@@ -99,6 +104,7 @@ export default function Home({history}) {
       <Route path="/ResetPassword" exact component={ResetPassword}/>
       <Route path="/Home" exact component={MarketPlace}/>
       <Route path="/Product/:id" component={Product}/>
+      <Route path="/Auction" component={Auction}/>
 
       <div className="bg-gray-900" style={{ background: '#1a1a1a'}}>
         <footer className="flex flex-wrap items-center justify-between p-3 m-auto">

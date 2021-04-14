@@ -52,7 +52,8 @@ exports.buyerLogin = async (req, res, next) => {
                            email: buyer.email, 
                            role :'buyer' , 
                            devise : buyer.devise,
-                           address : buyer.address
+                           address : buyer.address,
+                           full_name : buyer.full_name
                       },process.env.BUYER_TOKEN);
   res.header("auth-token", token).send(token);
 
@@ -120,3 +121,12 @@ exports.getBuyersPagin =  async (req,res) => {
   }
  
 }
+
+exports.getBuyerById = async (req, res, next) => {
+  try {
+    const buyer = await Buyer.findOne({ _id: req.params.id });
+    res.json(buyer);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

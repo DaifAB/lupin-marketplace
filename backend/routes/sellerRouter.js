@@ -19,7 +19,7 @@ router.get("/getAll", getAllSellers);
 router.get("/get", getSellersPagin);
 router.patch("/resetPassword", verifySellerToken, resetPassword);
 router.post("/login", sellerLogin);
-router.patch("/validate",verifyAdminToken , validSeller);
+router.patch("/validate" , validSeller);
 router.patch("/upgrade/:id", sellerPack);
 router.patch("/updateTurnOver/:id", updateTurnOver);
 router.delete("/delete/:id",deleteSeller)

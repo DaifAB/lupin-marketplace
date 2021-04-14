@@ -5,6 +5,19 @@ import AdminDashboard from './components/admin components/AdminDashboard'
 import SellerDashboard from './components/seller components/SellerDashboard'
 import Home from './components/Home'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
+import firebase from 'firebase/app'
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCE-ngUSyc05PrPp5AQbGGJ91qJyy0A8ZA",
+  authDomain: "benjamin-auction.firebaseapp.com",
+  projectId: "benjamin-auction",
+  storageBucket: "benjamin-auction.appspot.com",
+  messagingSenderId: "321741654623",
+  appId: "1:321741654623:web:2ce53475e01e52009069ea"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 function App() {
   return (
@@ -19,6 +32,7 @@ function App() {
         <Route path="/Admin/Delivery" exact component={AdminDashboard}/>
         <Route path="/Admin/Orders" exact component={AdminDashboard}/>
         <Route path="/Admin/Admins" exact component={AdminDashboard}/>
+        <Route path="/Admin/Auction" exact component={AdminDashboard}/>
 
         <Route path="/Seller/Dashboard" exact component={SellerDashboard}/>
         <Route path="/Seller/Info" exact component={SellerDashboard}/>
@@ -30,6 +44,7 @@ function App() {
         <Route path="/Signup" exact component={Home}/>
         <Route path="/ResetPassword" exact component={Home}/>
         <Route path="/Product/:id" exact component={Home}/>
+        <Route path="/Auction" exact component={Home}/>
       </Switch>
   </Router>
   );
